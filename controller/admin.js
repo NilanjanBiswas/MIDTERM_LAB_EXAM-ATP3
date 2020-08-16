@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var db 		= require.main.require('./models/db');
+var db    = require.main.require('./models/db');
 var userModel = require.main.require('./models/user-models');
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator/check');
 
 router.get('/',function(req,res){
   if(req.session.username== null){
@@ -33,26 +33,26 @@ router.post('/',function(req,res){
 //AllEmployeeList
 router.get('/AllEmployeeList', function(req, res){
 
-	userModel.getAllEmployee("employee",function(results){
+  userModel.getAllEmployee("employee",function(results){
     console.log(results);
-		res.render('admin/AllEmployee', { userList : results, username: req.session.username});
-	});
+    res.render('admin/AllEmployee', { userList : results, username: req.session.username});
+  });
 });
 
 router.post('/AllEmployeeList', function(req, res){
-	var search = req.body.search;
-	if(search == ""){
-		res.redirect('/admin/AllEmployeeList');
-	}
-	else{
-				userModel.getSearchByID(search,"employee", function(results){
+  var search = req.body.search;
+  if(search == ""){
+    res.redirect('/admin/AllEmployeeList');
+  }
+  else{
+        userModel.getSearchByID(search,"employee", function(results){
           if(results.length > 0){
-				       res.render('admin/search',{userList: results});
+               res.render('admin/search',{userList: results});
             }else{
                console.log('Search not found');
             }
-			});
-		}
+      });
+    }
 
 
 });
@@ -69,53 +69,53 @@ router.get('/AddEmployee',function(req,res){
 router.post('/AddEmployee',function(req,res){
   if(req.session.username != null){
 
-      		var user ={
+          var user ={
             name        : req.body.name,
-      			username 		: req.body.username,
-      			password   	: req.body.password,
+            username    : req.body.username,
+            password    : req.body.password,
             phone       : req.body.phone,
-      			userType	  : "employee"
-      		}
+            userType    : "employee"
+          }
 
-      		userModel.insert(user, function(status){
-      			if(status){
-      				res.redirect('/admin/AllEmployeeList');
-      			}else{
-      				res.redirect('/admin/AddEmployee');
-      			}
-      		});
-	}else{
-		res.redirect('/logout');
-	}
+          userModel.insert(user, function(status){
+            if(status){
+              res.redirect('/admin/AllEmployeeList');
+            }else{
+              res.redirect('/admin/AddEmployee');
+            }
+          });
+  }else{
+    res.redirect('/logout');
+  }
 });
 
 //update
 
 router.get('/update/:id', function(req, res){
 
-	userModel.getById(req.params.id, function(result){
-		res.render('admin/update',{user : result});
-	});
+  userModel.getById(req.params.id, function(result){
+    res.render('admin/update',{user : result});
+  });
 });
 
 router.post('/update/:id', function(req, res){
 
-	var user = {
+  var user = {
     username: req.body.username,
-		password: req.body.password,
+    password: req.body.password,
     phone: req.body.phone,
     address:req.body.address,
-		id: req.params.id
-	};
+    id: req.params.id
+  };
 
-	userModel.update(user, function(status){
-		if(status){
-			res.redirect('/admin/AllEmployeeList');
+  userModel.update(user, function(status){
+    if(status){
+      res.redirect('/admin/AllEmployeeList');
 
-		}else{
-			res.redirect('/admin/update/'+req.params.id);
-		}
-	});
+    }else{
+      res.redirect('/admin/update/'+req.params.id);
+    }
+  });
 });
 
 //DELETE
@@ -125,8 +125,8 @@ router.get('/delete/:id',function(req,res){
   }
   else{
     userModel.getById(req.params.id, function(result){
-  		res.render('admin/delete',{user : result});
-  	});
+      res.render('admin/delete',{user : result});
+    });
   }
 });
 
@@ -147,3 +147,4 @@ router.post('/delete/:id',function(req,res){
 });
 
 module.exports = router;
+© 2020 GitHub, Inc.
