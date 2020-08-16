@@ -1,8 +1,8 @@
 var express = require('express');
-var db 		= require.main.require('./models/db');
+var db    = require.main.require('./models/db');
 const { check, validationResult } = require('express-validator');
 var userModel = require.main.require('./models/user-models');
-var router 	= express.Router();
+var router  = express.Router();
 var err="";
 
 
@@ -18,19 +18,19 @@ router.post('/',[
   check('password', 'Password is required').not().isEmpty()],
   function(req, res){
 
-		var user ={
-			username: req.body.username,
-			password: req.body.password
-		};
+    var user ={
+      username: req.body.username,
+      password: req.body.password
+    };
 
 var errors = validationResult(req);
 
-		if (!errors.isEmpty()) {
-			console.log(errors.mapped());
+    if (!errors.isEmpty()) {
+      console.log(errors.mapped());
       err="username/password cannot be empty"
-    	res.redirect('/login');
-		}
-		else{
+      res.redirect('/login');
+    }
+    else{
 
           userModel.validate(user, function(status){
             if(status){
@@ -52,7 +52,7 @@ var errors = validationResult(req);
               res.redirect('/login');
             }
           });
-	}
+  }
 });
 
 
